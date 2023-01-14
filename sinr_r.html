@@ -1,0 +1,69 @@
+<!--
+This code was developed with ChatGPT by Jamal Almutawa through a series of promptts 14 Jan 2023
+
+The prompts used are:
+
+using html and javascript draw a 3d sin(r)/r that can be viewed around its axies
+
+I got this error:
+Uncaught TypeError: Cannot read properties of null (reading 'appendChild')
+
+can you list the full corrected code in a single html ?
+
+using this code, add a plot of z= sin(sqrt(x^2+y^2)) / (sqrt(x^2+y^2)
+
+make the line colors change in pleasant pattern
+
+show the full code together with the pleasant color changes in one html
+
+
+-->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.min.js"></script>
+</head>
+<body onload="init()">
+</body>
+<script>
+  function init() {
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    var material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
+    var geometry = new THREE.Geometry();
+    var r, x, y, z;
+    var color = new THREE.Color();
+    for (var i = -5; i < 5; i += 0.1) {
+      for (var j = -5; j < 5; j += 0.1) {
+        r = Math.sqrt(i*i + j*j);
+        x = i;
+        y = j;
+        z = Math.sin(r) / r;
+        geometry.vertices.push(new THREE.Vector3(x, y, z));
+        color.setHSL(0.5 + 0.5*Math.sin(r), 0.5, 0.5);
+        geometry.colors.push(color);
+      }
+    }
+
+    var line = new THREE.Line(geometry, material);
+    scene.add(line);
+    camera.position.z = 5;
+
+    function animate() {
+      requestAnimationFrame( animate );
+      line.rotation.x += 0.01;
+      line.rotation.y += 0.01;
+      renderer.render( scene, camera );
+    }
+    animate();
+  }
+</script>
+</html>
